@@ -8,8 +8,10 @@ export const GameOfLifeStyles = makeStyles((theme: Theme) =>
     center: {
         textAlign: 'center'
     },
-    gridSpacing: {
-        marginTop: '8vh'
+    gridContainer: {
+        marginTop: '8vh',
+        display: 'flex',
+        justifyContent: 'center'
     }
   })
 );

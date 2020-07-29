@@ -7,6 +7,9 @@ import { Grid } from '../grid/grid.component';
 
 export const GameOfLife = () => {
     const classes: IClasses = GameOfLifeStyles();
+    // temp adding random state to use
+    const cellsInitialRandomState: number[][] = [[0,1,0],[0,1,1],[0,1,0]];
+
     return(
         <div className={classes.center}>
             <div className={classes.buttonGroupSpacing}>
@@ -17,8 +20,8 @@ export const GameOfLife = () => {
                     <Button> Randomize </Button>
                 </ButtonGroup>
             </div>
-            <div className={classes.gridSpacing}>
-                <Grid />
+            <div className={classes.gridContainer}>
+                <Grid cellsInitialRandomState={cellsInitialRandomState}/>
             </div>
         </div>
     )

@@ -4,8 +4,10 @@ export const GridStyles = makeStyles((theme: Theme) =>
   createStyles({
     grid: {
         backgroundColor: 'white',
-        maxWidth: 'fit-content',
-        display: 'inline-flex'
+        maxWidth: 'fit-content'
+    },
+    cellContainer: {
+      display: 'flex'
     }
   })
 );
