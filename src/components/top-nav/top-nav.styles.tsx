@@ -5,9 +5,6 @@ export const TopNavStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
     },
-    background: {
-        backgroundColor: '#C1472D'
-    },
     title: {
       flexGrow: 1,
       textAlign: 'center'

@@ -3,7 +3,7 @@ import { GridStyles} from './grid.styles';
 import { Cell } from '../cell/cell.component';
 import { IGrid, IClasses } from './grid.interfaces';
 
-export const Grid = (props: IGrid) => {
+export const Grid = (props: IGrid): ReactElement => {
     const classes: IClasses = GridStyles();
     const createGrid = (initalCells: number[][]): ReactElement => {
         return (
@@ -15,7 +15,7 @@ export const Grid = (props: IGrid) => {
                                 {
                                     cells.map((cellState: number, j: number) => {
                                         return (
-                                            <Cell key={j}/>
+                                            <Cell cellState={cellState} key={j}/>
                                         )
                                     })
                                 }

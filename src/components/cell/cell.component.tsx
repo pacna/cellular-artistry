@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState, ReactElement } from 'react';
 import { CellStyles } from './cell.styles';
+import { ICell, IClasses } from './cell.interfaces';
 
-export const Cell = () => {
-    const classes = CellStyles();
+enum CELLSTATE {
+    alive = 1, 
+    dead = 0
+}
+
+export const Cell = (props: ICell): ReactElement => {
+    const [cellState, setCellState] = useState(props.cellState);
+
+    const {
+        alive,
+        dead
+    } = CELLSTATE;
+    
+    const changeCellState = (): void => {
+        if(cellState === alive) {
+            setCellState(dead);
+        } else {
+            setCellState(alive);
+        }
+    }
+
+    const classes: IClasses = CellStyles();
+
     return(
-        <div className={classes.cell}></div>
+        <div
+            onClick={changeCellState}
+            className={`${classes.cell} ${cellState === alive ? classes.alive : classes.dead}`}>
+        </div>
     )
 }

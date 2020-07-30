@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { GameOfLifeStyles } from './game-of-life.styles';
 import { IClasses } from './game-of-life.interfaces';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import { Grid } from '../grid/grid.component';
 
-export const GameOfLife = () => {
+export const GameOfLife = (): ReactElement => {
     const classes: IClasses = GameOfLifeStyles();
     // temp adding random state to use
     const cellsInitialRandomState: number[][] = [[0,1,0],[0,1,1],[0,1,0]];
