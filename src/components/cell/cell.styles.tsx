@@ -8,7 +8,7 @@ export const CellStyles = makeStyles((theme: Theme) =>
         width: '14px'
     },
     dead: {
-      background: 'black'
+      background: '#262626'
     },
     alive: {
       background: 'white'

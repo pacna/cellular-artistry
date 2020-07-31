@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { CellStyles } from './cell.styles';
 import { ICell, IClasses } from './cell.interfaces';
 
@@ -9,26 +9,32 @@ enum CELLSTATE {
 
 export const Cell = (props: ICell): ReactElement => {
     const [cellState, setCellState] = useState(props.cellState);
-
-    const {
-        alive,
-        dead
-    } = CELLSTATE;
     
     const changeCellState = (): void => {
-        if(cellState === alive) {
-            setCellState(dead);
+        props.setCommand(''); // clear out any existing command
+        if(cellState === CELLSTATE.alive) {
+            setCellState(CELLSTATE.dead);
         } else {
-            setCellState(alive);
+            setCellState(CELLSTATE.alive);
         }
     }
 
     const classes: IClasses = CellStyles();
 
+    const updateCellBackgroundColor = (cellState: number): any => {
+        return cellState === CELLSTATE.alive ? classes.alive : classes.dead
+    }
+
+    useEffect(() => {
+        if(props.command === 'clear') {
+            setCellState(CELLSTATE.dead);
+        }   
+    }, [props.command]);
+
     return(
         <div
             onClick={changeCellState}
-            className={`${classes.cell} ${cellState === alive ? classes.alive : classes.dead}`}>
+            className={`${classes.cell} ${updateCellBackgroundColor(cellState)}`}>
         </div>
     )
 }

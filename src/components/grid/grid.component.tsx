@@ -15,7 +15,12 @@ export const Grid = (props: IGrid): ReactElement => {
                                 {
                                     cells.map((cellState: number, j: number) => {
                                         return (
-                                            <Cell cellState={cellState} key={j}/>
+                                            <Cell 
+                                                cellState={cellState} 
+                                                key={j}
+                                                command={props.command}
+                                                setCommand={props.setCommand}
+                                            />
                                         )
                                     })
                                 }

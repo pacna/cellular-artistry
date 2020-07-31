@@ -1,5 +1,7 @@
 export interface ICell {
     cellState: number;
+    command: string;
+    setCommand: Function;
 }
 
 export interface IClasses {
