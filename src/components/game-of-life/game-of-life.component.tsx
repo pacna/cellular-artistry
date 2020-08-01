@@ -48,7 +48,7 @@ export const GameOfLife = (): ReactElement => {
                 </ButtonGroup>
             </div>
             <form className={classes.formContainer}>
-                <FormControl required className={classes.formControl}>
+                <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Row</InputLabel>
                     <Select>
                         <div className={classes.select}>
@@ -63,7 +63,7 @@ export const GameOfLife = (): ReactElement => {
                     </Select>
                     <FormHelperText>Pick 5 - 25</FormHelperText>
                 </FormControl>
-                <FormControl required className={classes.formControl}>
+                <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Column</InputLabel>
                     <Select>
                         <div className={classes.select}>
