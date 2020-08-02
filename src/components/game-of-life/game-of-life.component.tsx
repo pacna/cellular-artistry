@@ -39,7 +39,11 @@ export const GameOfLife = (): ReactElement => {
     const classes: IClasses = GameOfLifeStyles();
 
     const clearGrid = (): void => {
-        setCommand(COMMAND.clear);
+        const deadGeneration: number[][] = generation.map((cells: number[]) => {
+            return cells.map(() => 0);
+        })
+
+        setGeneration(deadGeneration);
     }
 
     const updateRow = (event: ChangeEvent<{ value: unknown }>): void => {
@@ -93,9 +97,9 @@ export const GameOfLife = (): ReactElement => {
                         MenuProps={MenuProps}
                     >
                         {
-                            GridSize.map((x: number, i: number) => {
+                            GridSize.map((x: number) => {
                                 return(
-                                    <MenuItem key={i} value={x}> {x} </MenuItem>
+                                    <MenuItem key={x} value={x}> {x} </MenuItem>
                                 )
                             })
                         }
@@ -122,7 +126,7 @@ export const GameOfLife = (): ReactElement => {
             </form>
             <div className={classes.gridContainer}>
                 <Grid 
-                    cellsInitialRandomState={generation}
+                    generation={generation}
                     command={command}
                     setCommand={setCommand}
                     />

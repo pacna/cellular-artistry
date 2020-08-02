@@ -1,5 +1,5 @@
 export interface IGrid {
-    cellsInitialRandomState: number[][];
+    generation: number[][];
     command: string;
     setCommand: Function;
 }

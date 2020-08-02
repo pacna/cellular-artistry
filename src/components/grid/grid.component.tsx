@@ -5,11 +5,12 @@ import { IGrid, IClasses } from './grid.interfaces';
 
 export const Grid = (props: IGrid): ReactElement => {
     const classes: IClasses = GridStyles();
-    const createGrid = (initalCells: number[][]): ReactElement => {
+
+    const createGrid = (generation: number[][]): ReactElement => {
         return (
             <div className={classes.grid}>
                 {
-                    initalCells.map((cells: number[], i: number) => {
+                    generation.map((cells: number[], i: number) => {
                         return(
                             <div className={classes.cellContainer} key={i}>
                                 {
@@ -20,6 +21,9 @@ export const Grid = (props: IGrid): ReactElement => {
                                                 key={j}
                                                 command={props.command}
                                                 setCommand={props.setCommand}
+                                                generation={generation}
+                                                row={i}
+                                                column={j}
                                             />
                                         )
                                     })
@@ -34,7 +38,7 @@ export const Grid = (props: IGrid): ReactElement => {
     return (
         <div>
             {   
-                createGrid(props.cellsInitialRandomState)
+                createGrid(props.generation)
             }
         </div>
     )

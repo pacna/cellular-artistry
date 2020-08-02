@@ -26,10 +26,10 @@ export const Cell = (props: ICell): ReactElement => {
     }
 
     useEffect(() => {
-        if(props.command === 'clear') {
-            setCellState(CELLSTATE.dead);
+        if (props.generation && props.generation[props.row][props.column] !== cellState) {
+            setCellState(props.generation[props.row][props.column]);
         }   
-    }, [props.command]);
+    }, [props.command, props.generation, props.row, props.column, cellState]);
 
     return(
         <div
