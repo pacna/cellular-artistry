@@ -1,5 +1,5 @@
 export interface IClasses {
-    buttonGroupSpacing: any;
+    marginTop4vhSpacing: any;
     formContainer: any;
     formControl: any;
     center: any;

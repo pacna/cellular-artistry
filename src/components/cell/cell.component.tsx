@@ -2,7 +2,7 @@ import React, { useState, useEffect, ReactElement } from 'react';
 import { CellStyles } from './cell.styles';
 import { ICell, IClasses } from './cell.interfaces';
 
-enum CELLSTATE {
+export enum CELLSTATE {
     alive = 1, 
     dead = 0
 }

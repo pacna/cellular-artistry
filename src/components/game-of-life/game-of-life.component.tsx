@@ -1,5 +1,12 @@
 // React
-import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
+import React, { 
+    ReactElement, 
+    useState, 
+    ChangeEvent, 
+    FormEvent, 
+    useCallback, 
+    useEffect
+} from 'react';
 
 // Material UI
 import { 
@@ -17,9 +24,12 @@ import { GameOfLifeStyles } from './game-of-life.styles';
 import { IClasses } from './game-of-life.interfaces';
 import { Grid } from '../grid/grid.component';
 import { GridSize } from './grid-size';
+import { CELLSTATE } from '../cell/cell.component';
 
 enum COMMAND {
-    clear = 'clear'
+    paused = 'paused',
+    resume = 'resume',
+    autoplay = 'autoplay'
 }
 
 const MenuProps = {
@@ -35,6 +45,7 @@ export const GameOfLife = (): ReactElement => {
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
     const [generation, setGeneration] = useState([] as number[][])
+    const [generationCount, setGenerationCount] = useState(0);
 
     const classes: IClasses = GameOfLifeStyles();
 
@@ -44,6 +55,7 @@ export const GameOfLife = (): ReactElement => {
         })
 
         setGeneration(deadGeneration);
+        setGenerationCount(generationCount + 1);
     }
 
     const updateRow = (event: ChangeEvent<{ value: unknown }>): void => {
@@ -68,6 +80,7 @@ export const GameOfLife = (): ReactElement => {
         }
 
         setGeneration(firstGeneration);
+        setGenerationCount(generationCount + 1);
     }
 
     const setRandomCellState = (): number => {
@@ -75,17 +88,133 @@ export const GameOfLife = (): ReactElement => {
     }
 
     const nextGeneration = (): void => {
-        console.log(generation);
+        const nextGeneration: number[][] = generation.map((cells: number[], i: number) => {
+            return cells.map((cell: number, j: number) => {
+                let aliveCount: number = 0;
+
+                // left neighbor
+                if (isWithinRange(i, j-1)) {
+                    const leftNeighbor: number = generation[i][j-1];
+                    if (leftNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // right neighbor
+                if (isWithinRange(i, j+1)) {
+                    const rightNeighbor: number = generation[i][j+1];
+                    if(rightNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // top neighbor
+                if (isWithinRange(i-1, j)) {
+                    const topNeighbor: number = generation[i-1][j];
+                    if(topNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // down neighbor
+                if (isWithinRange(i+1, j)) {
+                    const downNeighbor: number = generation[i+1][j];
+                    if(downNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // top left neighbor
+                if(isWithinRange(i-1, j-1)) {
+                    const topLeftNeighbor: number = generation[i-1][j-1];
+                    if (topLeftNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // top right neighbor
+                if(isWithinRange(i-1, j+1)) {
+                    const topRightNeighbor: number = generation[i-1][j+1];
+                    if (topRightNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // bottom left neighbor
+                if (isWithinRange(i+1, j-1)) {
+                    const bottomLeftNeighbor: number = generation[i+1][j-1];
+                    if (bottomLeftNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+                // bottom right neighbor
+                if (isWithinRange(i+1, j+1)) {
+                    const bottomRightNeighbor: number = generation[i+1][j+1];
+                    if( bottomRightNeighbor === CELLSTATE.alive) {
+                        aliveCount++;
+                    }
+                }
+
+                return applyGameOfLifeRules(aliveCount, cell);
+            })
+        })
+
+        setGeneration(nextGeneration);
+        setGenerationCount(generationCount + 1);
     }
+
+    const applyGameOfLifeRules = (aliveCount: number, cell: number): number => {
+        if (cell === CELLSTATE.alive) {
+            if (aliveCount === 2 || aliveCount === 3) {
+                return CELLSTATE.alive;
+            } else {
+                return CELLSTATE.dead;
+            }
+        } else {
+            if (aliveCount === 3) {
+                return CELLSTATE.alive;
+            } else {
+                return CELLSTATE.dead;
+            }
+        }
+    }
+
+    const isWithinRange = (row: number, column: number): boolean => {
+        if((row >= 0 && row < generation.length) && (column >= 0 && column < generation[0].length)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const autoPlay = (): void => {
+        setCommand(COMMAND.autoplay);
+        interval();
+    }
+
+    const paused = (): void => {
+        setCommand(COMMAND.paused);
+    }
+
+    const interval = useCallback(() => {
+        const interval = setTimeout(() => {
+            if(command === COMMAND.paused) {
+                clearTimeout(interval);
+            } else {
+                nextGeneration();
+            }
+        }, 1000)
+    }, [nextGeneration, command])
+
+    // useEffect(() => {
+    //     interval();
+    // }, [interval])
 
     return(
         <div className={classes.center}>
-            <div className={classes.buttonGroupSpacing}>
+            <div className={classes.marginTop4vhSpacing}>
+                Generation: { generationCount }
+            </div>
+            <div className={classes.marginTop4vhSpacing}>
                 <ButtonGroup variant="contained" color="primary">
                     <Button onClick={clearGrid}> Clear </Button>
                     <Button onClick={nextGeneration}> Next Generation </Button>
-                    <Button> Pause </Button>
-                    <Button> Autoplay </Button>
+                    <Button onClick={paused}> Pause </Button>
+                    <Button onClick={autoPlay}> Autoplay </Button>
                 </ButtonGroup>
             </div>
             <form className={classes.formContainer} onSubmit={createGrid}>
@@ -104,7 +233,7 @@ export const GameOfLife = (): ReactElement => {
                             })
                         }
                     </Select>
-                    <FormHelperText>Pick 5 - 25</FormHelperText>
+                    <FormHelperText>Pick {GridSize[0]} - {GridSize.length} </FormHelperText>
                 </FormControl>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Column</InputLabel>
@@ -120,7 +249,7 @@ export const GameOfLife = (): ReactElement => {
                             })
                         }
                     </Select>
-                    <FormHelperText>Pick 5 - 25</FormHelperText>
+                    <FormHelperText>Pick {GridSize[0]} - {GridSize.length}</FormHelperText>
                 </FormControl>
                 <Button type="submit" variant="contained" color="secondary">Generate</Button>
             </form>

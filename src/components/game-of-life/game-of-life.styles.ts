@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 export const GameOfLifeStyles = makeStyles((theme: Theme) =>
   createStyles({
-    buttonGroupSpacing: {
+    marginTop4vhSpacing: {
         marginTop: '4vh'
     },
     formContainer: {
