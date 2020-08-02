@@ -15,9 +15,6 @@ export const GameOfLifeStyles = makeStyles((theme: Theme) =>
       minWidth: 140,
       marginRight: '4vh'
     },
-    select: {
-      maxHeight: 140
-    },
     center: {
         textAlign: 'center'
     },

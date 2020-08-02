@@ -1,5 +1,5 @@
 // React
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
 
 // Material UI
 import { 
@@ -22,15 +22,52 @@ enum COMMAND {
     clear = 'clear'
 }
 
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: 190
+        },
+    }
+};
+
 export const GameOfLife = (): ReactElement => {
     const [command, setCommand] = useState('');
-    // temp adding random state to use
-    const [generation, setGeneration] = useState([[0,1,0],[0,1,1],[0,1,0]])
+    const [row, setRow] = useState('');
+    const [column, setColumn] = useState('');
+    const [generation, setGeneration] = useState([] as number[][])
+
     const classes: IClasses = GameOfLifeStyles();
 
     const clearGrid = (): void => {
-        setGeneration([[0,0,0],[0,0,0],[0,0,0]]);
         setCommand(COMMAND.clear);
+    }
+
+    const updateRow = (event: ChangeEvent<{ value: unknown }>): void => {
+        const newRowValue = event.target.value as string;
+        setRow(newRowValue);
+    }
+
+    const updateColumn = (event: ChangeEvent<{ value: unknown }>): void => {
+        const newColumnValue = event.target.value as string;
+        setColumn(newColumnValue);
+    }
+
+    const createGrid = (event: FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+
+        let firstGeneration: number[][] = [];
+        for(let i = 0; i < Number(row); i++) {
+            firstGeneration.push([]);
+            for(let j = 0; j < Number(column); j++) {
+                firstGeneration[i].push(setRandomCellState());
+            }
+        }
+
+        setGeneration(firstGeneration);
+    }
+
+    const setRandomCellState = (): number => {
+        return Math.round(Math.random()) // return either 0 or 1
     }
 
     const nextGeneration = (): void => {
@@ -44,41 +81,44 @@ export const GameOfLife = (): ReactElement => {
                     <Button onClick={clearGrid}> Clear </Button>
                     <Button onClick={nextGeneration}> Next Generation </Button>
                     <Button> Pause </Button>
-                    <Button> Randomize </Button>
+                    <Button> Autoplay </Button>
                 </ButtonGroup>
             </div>
-            <form className={classes.formContainer}>
+            <form className={classes.formContainer} onSubmit={createGrid}>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Row</InputLabel>
-                    <Select>
-                        <div className={classes.select}>
-                            {
-                                GridSize.map((x: number) => {
-                                    return(
-                                        <MenuItem value={x}> {x} </MenuItem>
-                                    )
-                                })
-                            }
-                        </div>
+                    <Select
+                        value={row} 
+                        onChange={updateRow}
+                        MenuProps={MenuProps}
+                    >
+                        {
+                            GridSize.map((x: number, i: number) => {
+                                return(
+                                    <MenuItem key={i} value={x}> {x} </MenuItem>
+                                )
+                            })
+                        }
                     </Select>
                     <FormHelperText>Pick 5 - 25</FormHelperText>
                 </FormControl>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Column</InputLabel>
-                    <Select>
-                        <div className={classes.select}>
-                            {
-                                GridSize.map((x: number) => {
-                                    return(
-                                        <MenuItem value={x}> {x} </MenuItem>
-                                    )
-                                })
-                            }
-                        </div>
+                    <Select
+                        value={column}
+                        onChange={updateColumn}
+                        MenuProps={MenuProps}>
+                        {
+                            GridSize.map((x: number, i: number) => {
+                                return(
+                                    <MenuItem key={i} value={x}> {x} </MenuItem>
+                                )
+                            })
+                        }
                     </Select>
                     <FormHelperText>Pick 5 - 25</FormHelperText>
                 </FormControl>
-                <Button type="submit" variant="contained" color="secondary">Submit</Button>
+                <Button type="submit" variant="contained" color="secondary">Generate</Button>
             </form>
             <div className={classes.gridContainer}>
                 <Grid 
