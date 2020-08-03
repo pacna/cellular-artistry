@@ -4,8 +4,8 @@ import React, {
     useState, 
     ChangeEvent, 
     FormEvent, 
-    useCallback, 
-    useEffect
+    useEffect,
+    useRef
 } from 'react';
 
 // Material UI
@@ -26,7 +26,7 @@ import { Grid } from '../grid/grid.component';
 import { GridSize } from './grid-size';
 import { CELLSTATE } from '../cell/cell.component';
 
-enum COMMAND {
+export enum COMMAND {
     paused = 'paused',
     resume = 'resume',
     autoplay = 'autoplay'
@@ -35,7 +35,7 @@ enum COMMAND {
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: 190
+            maxHeight: 370
         },
     }
 };
@@ -45,17 +45,17 @@ export const GameOfLife = (): ReactElement => {
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
     const [generation, setGeneration] = useState([] as number[][])
-    const [generationCount, setGenerationCount] = useState(0);
-
+    
+    let autoGeneration: any = useRef(null);
     const classes: IClasses = GameOfLifeStyles();
 
     const clearGrid = (): void => {
+        setCommand(COMMAND.resume);
         const deadGeneration: number[][] = generation.map((cells: number[]) => {
             return cells.map(() => 0);
         })
 
         setGeneration(deadGeneration);
-        setGenerationCount(generationCount + 1);
     }
 
     const updateRow = (event: ChangeEvent<{ value: unknown }>): void => {
@@ -80,7 +80,6 @@ export const GameOfLife = (): ReactElement => {
         }
 
         setGeneration(firstGeneration);
-        setGenerationCount(generationCount + 1);
     }
 
     const setRandomCellState = (): number => {
@@ -88,6 +87,10 @@ export const GameOfLife = (): ReactElement => {
     }
 
     const nextGeneration = (): void => {
+        if (command === COMMAND.paused) {
+            return;
+        }
+
         const nextGeneration: number[][] = generation.map((cells: number[], i: number) => {
             return cells.map((cell: number, j: number) => {
                 let aliveCount: number = 0;
@@ -154,7 +157,6 @@ export const GameOfLife = (): ReactElement => {
         })
 
         setGeneration(nextGeneration);
-        setGenerationCount(generationCount + 1);
     }
 
     const applyGameOfLifeRules = (aliveCount: number, cell: number): number => {
@@ -181,40 +183,34 @@ export const GameOfLife = (): ReactElement => {
         }
     }
 
-    const autoPlay = (): void => {
-        setCommand(COMMAND.autoplay);
-        interval();
+    const play = (): void => {
+        setCommand(COMMAND.resume);
+        nextGeneration();
     }
 
-    const paused = (): void => {
-        setCommand(COMMAND.paused);
-    }
+    useEffect(() => {
+        if (command === COMMAND.autoplay) {
+            autoGeneration = setTimeout(() => {
+                nextGeneration()
+            }, 500);
+        }
+    }, [command, nextGeneration])
 
-    const interval = useCallback(() => {
-        const interval = setTimeout(() => {
-            if(command === COMMAND.paused) {
-                clearTimeout(interval);
-            } else {
-                nextGeneration();
-            }
-        }, 1000)
-    }, [nextGeneration, command])
 
-    // useEffect(() => {
-    //     interval();
-    // }, [interval])
+    useEffect(() => {
+        if (command === COMMAND.paused) {
+            clearTimeout(autoGeneration);
+        }
+    })
 
     return(
         <div className={classes.center}>
             <div className={classes.marginTop4vhSpacing}>
-                Generation: { generationCount }
-            </div>
-            <div className={classes.marginTop4vhSpacing}>
                 <ButtonGroup variant="contained" color="primary">
                     <Button onClick={clearGrid}> Clear </Button>
-                    <Button onClick={nextGeneration}> Next Generation </Button>
-                    <Button onClick={paused}> Pause </Button>
-                    <Button onClick={autoPlay}> Autoplay </Button>
+                    <Button onClick={play}> Next Generation </Button>
+                    <Button onClick={() => setCommand(COMMAND.paused)}> Pause </Button>
+                    <Button onClick={() => setCommand(COMMAND.autoplay)}> Autoplay </Button>
                 </ButtonGroup>
             </div>
             <form className={classes.formContainer} onSubmit={createGrid}>

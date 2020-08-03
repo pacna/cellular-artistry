@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import { CellStyles } from './cell.styles';
 import { ICell, IClasses } from './cell.interfaces';
+import { COMMAND } from '../game-of-life/game-of-life.component';
 
 export enum CELLSTATE {
     alive = 1, 
@@ -11,7 +12,6 @@ export const Cell = (props: ICell): ReactElement => {
     const [cellState, setCellState] = useState(props.cellState);
     
     const changeCellState = (): void => {
-        props.setCommand(''); // clear out any existing command
         if(cellState === CELLSTATE.alive) {
             setCellState(CELLSTATE.dead);
         } else {
@@ -26,7 +26,7 @@ export const Cell = (props: ICell): ReactElement => {
     }
 
     useEffect(() => {
-        if (props.generation && props.generation[props.row][props.column] !== cellState) {
+        if (props.generation[props.row][props.column] !== cellState && props.command !== COMMAND.paused) {
             setCellState(props.generation[props.row][props.column]);
         }   
     }, [props.command, props.generation, props.row, props.column, cellState]);
