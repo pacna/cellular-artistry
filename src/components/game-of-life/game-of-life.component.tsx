@@ -192,7 +192,7 @@ export const GameOfLife = (): ReactElement => {
         if (command === COMMAND.autoplay) {
             autoGeneration = setTimeout(() => {
                 nextGeneration()
-            }, 500);
+            }, 1000);
         }
     }, [command, nextGeneration])
 
@@ -252,6 +252,7 @@ export const GameOfLife = (): ReactElement => {
             <div className={classes.gridContainer}>
                 <Grid 
                     generation={generation}
+                    setGeneration={setGeneration}
                     command={command}
                     setCommand={setCommand}
                     />

@@ -22,6 +22,7 @@ export const Grid = (props: IGrid): ReactElement => {
                                                 command={props.command}
                                                 setCommand={props.setCommand}
                                                 generation={generation}
+                                                setGeneration={props.setGeneration}
                                                 row={i}
                                                 column={j}
                                             />

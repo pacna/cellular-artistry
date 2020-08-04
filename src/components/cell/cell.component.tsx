@@ -12,10 +12,16 @@ export const Cell = (props: ICell): ReactElement => {
     const [cellState, setCellState] = useState(props.cellState);
     
     const changeCellState = (): void => {
+        const copyGeneration: number[][] = props.generation.map((x: number[]) => x); 
+        if (props.command === COMMAND.paused) {
+            props.setCommand(COMMAND.resume);
+        }
         if(cellState === CELLSTATE.alive) {
-            setCellState(CELLSTATE.dead);
+            copyGeneration[props.row][props.column] = CELLSTATE.dead;
+            props.setGeneration(copyGeneration);
         } else {
-            setCellState(CELLSTATE.alive);
+            copyGeneration[props.row][props.column] = CELLSTATE.alive;
+            props.setGeneration(copyGeneration);
         }
     }
 
