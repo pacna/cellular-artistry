@@ -18,7 +18,7 @@ describe('GameOfLife', () => {
         shallow = createShallow();
     })
 
-    it('should be disabled by default', () => {
+    it('buttons should be disabled by default', () => {
         // ARRANGE
         const wrapper = shallow(<GameOfLife />);
         const buttonGroup = wrapper.find(ButtonGroup);
