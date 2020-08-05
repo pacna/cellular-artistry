@@ -27,9 +27,14 @@ import { GridSize } from './grid-size';
 import { CELLSTATE } from '../cell/cell.component';
 
 export enum COMMAND {
-    paused = 'paused',
+    pause = 'pause',
     resume = 'resume',
     autoplay = 'autoplay'
+}
+
+enum STATUS {
+    on = 1,
+    off = 0
 }
 
 const MenuProps = {
@@ -42,6 +47,7 @@ const MenuProps = {
 
 export const GameOfLife = (): ReactElement => {
     const [command, setCommand] = useState('');
+    const [status, setStatus] = useState(STATUS.on);
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
     const [generation, setGeneration] = useState([] as number[][])
@@ -87,7 +93,7 @@ export const GameOfLife = (): ReactElement => {
     }
 
     const nextGeneration = (): void => {
-        if (command === COMMAND.paused) {
+        if (command === COMMAND.pause) {
             return;
         }
 
@@ -188,6 +194,16 @@ export const GameOfLife = (): ReactElement => {
         nextGeneration();
     }
 
+    const handleStatus = (status: number): void => {
+        if (status === STATUS.on) {
+            setStatus(STATUS.off); // to show it's paused in the UI
+            setCommand(COMMAND.autoplay);
+        } else {
+            setStatus(STATUS.on);
+            setCommand(COMMAND.pause);
+        }
+    }
+
     useEffect(() => {
         if (command === COMMAND.autoplay) {
             autoGeneration = setTimeout(() => {
@@ -198,7 +214,7 @@ export const GameOfLife = (): ReactElement => {
 
 
     useEffect(() => {
-        if (command === COMMAND.paused) {
+        if (command === COMMAND.pause) {
             clearTimeout(autoGeneration);
         }
     })
@@ -209,8 +225,12 @@ export const GameOfLife = (): ReactElement => {
                 <ButtonGroup variant="contained" color="primary">
                     <Button onClick={clearGrid}> Clear </Button>
                     <Button onClick={play}> Next Generation </Button>
-                    <Button onClick={() => setCommand(COMMAND.paused)}> Pause </Button>
-                    <Button onClick={() => setCommand(COMMAND.autoplay)}> Autoplay </Button>
+                    <Button onClick={() => handleStatus(status)}>
+                        { status === STATUS.on ? COMMAND.autoplay : COMMAND.pause}
+                    </Button>
+                    <Button>
+                        Glider
+                    </Button>
                 </ButtonGroup>
             </div>
             <form className={classes.formContainer} onSubmit={createGrid}>
@@ -229,7 +249,7 @@ export const GameOfLife = (): ReactElement => {
                             })
                         }
                     </Select>
-                    <FormHelperText>Pick {GridSize[0]} - {GridSize.length} </FormHelperText>
+                    <FormHelperText>Pick {GridSize[0]} - {GridSize[GridSize.length - 1]} </FormHelperText>
                 </FormControl>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Column</InputLabel>
@@ -240,12 +260,12 @@ export const GameOfLife = (): ReactElement => {
                         {
                             GridSize.map((x: number, i: number) => {
                                 return(
-                                    <MenuItem key={i} value={x}> {x} </MenuItem>
+                                    <MenuItem key={x} value={x}> {x} </MenuItem>
                                 )
                             })
                         }
                     </Select>
-                    <FormHelperText>Pick {GridSize[0]} - {GridSize.length}</FormHelperText>
+                    <FormHelperText>Pick {GridSize[0]} - {GridSize[GridSize.length - 1]}</FormHelperText>
                 </FormControl>
                 <Button type="submit" variant="contained" color="secondary">Generate</Button>
             </form>

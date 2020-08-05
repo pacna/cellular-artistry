@@ -7,16 +7,16 @@ export enum CELLSTATE {
     alive = 1, 
     dead = 0
 }
+let copyGeneration: number[][];
 
 export const Cell = (props: ICell): ReactElement => {
     const [cellState, setCellState] = useState(props.cellState);
     
     const changeCellState = (): void => {
-        const copyGeneration: number[][] = props.generation.map((x: number[]) => x); 
-        if (props.command === COMMAND.paused) {
+        if (props.command === COMMAND.pause) {
             props.setCommand(COMMAND.resume);
         }
-        if(cellState === CELLSTATE.alive) {
+        if(cellState === CELLSTATE.alive) { 
             copyGeneration[props.row][props.column] = CELLSTATE.dead;
             props.setGeneration(copyGeneration);
         } else {
@@ -32,7 +32,8 @@ export const Cell = (props: ICell): ReactElement => {
     }
 
     useEffect(() => {
-        if (props.generation[props.row][props.column] !== cellState && props.command !== COMMAND.paused) {
+        if (props.generation[props.row][props.column] !== cellState && props.command !== COMMAND.pause) {
+            copyGeneration = props.generation.map((x: number[]) => x);
             setCellState(props.generation[props.row][props.column]);
         }   
     }, [props.command, props.generation, props.row, props.column, cellState]);
