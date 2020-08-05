@@ -48,6 +48,7 @@ const MenuProps = {
 export const GameOfLife = (): ReactElement => {
     const [command, setCommand] = useState('');
     const [status, setStatus] = useState(STATUS.on);
+    const [disabled, setDisabled] = useState(true);
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
     const [generation, setGeneration] = useState([] as number[][])
@@ -73,10 +74,17 @@ export const GameOfLife = (): ReactElement => {
         const newColumnValue = event.target.value as string;
         setColumn(newColumnValue);
     }
-
-    const createGrid = (event: FormEvent<HTMLFormElement>): void => {
+    
+    const generateGrid = (event: FormEvent<HTMLFormElement>): void => {
         event.preventDefault();
+        createGrid();
+        if(disabled) {// no need to set it to false every time.
+            setDisabled(false);
+        }
 
+    }
+
+    const createGrid = (): void => {
         let firstGeneration: number[][] = [];
         for(let i = 0; i < Number(row); i++) {
             firstGeneration.push([]);
@@ -222,7 +230,7 @@ export const GameOfLife = (): ReactElement => {
     return(
         <div className={classes.center}>
             <div className={classes.marginTop4vhSpacing}>
-                <ButtonGroup variant="contained" color="primary">
+                <ButtonGroup variant="contained" color="primary" disabled={disabled}>
                     <Button onClick={clearGrid}> Clear </Button>
                     <Button onClick={play}> Next Generation </Button>
                     <Button onClick={() => handleStatus(status)}>
@@ -233,7 +241,7 @@ export const GameOfLife = (): ReactElement => {
                     </Button>
                 </ButtonGroup>
             </div>
-            <form className={classes.formContainer} onSubmit={createGrid}>
+            <form className={classes.formContainer} onSubmit={generateGrid}>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Row</InputLabel>
                     <Select

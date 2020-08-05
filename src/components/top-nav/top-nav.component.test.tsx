@@ -10,4 +10,4 @@ describe('TopNav', () => {
         // ASSERT
         expect(wrapper.text()).toBe('REACT Game of Life');
     })
-})
+});
