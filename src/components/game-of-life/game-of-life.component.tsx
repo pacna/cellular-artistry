@@ -248,7 +248,6 @@ export const GameOfLife = (): ReactElement => {
 
     useEffect(() => {
         if (command === COMMAND.pause) {
-            console.log('grid', generation);
             clearTimeout(autoGeneration);
         }
     }, [command, generation])
