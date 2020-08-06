@@ -29,7 +29,8 @@ import { CELLSTATE } from '../cell/cell.component';
 export enum COMMAND {
     pause = 'pause',
     resume = 'resume',
-    autoplay = 'autoplay'
+    play = 'play',
+    clear = 'clear'
 }
 
 enum STATUS {
@@ -58,11 +59,17 @@ export const GameOfLife = (): ReactElement => {
 
     const clearGrid = (): void => {
         setCommand(COMMAND.resume);
+        const emptyGeneration: number[][] = noSurvivors();
+        setGeneration(emptyGeneration);
+        setStatus(STATUS.on);
+    }
+
+    const noSurvivors = (): number[][] => {
         const deadGeneration: number[][] = generation.map((cells: number[]) => {
-            return cells.map(() => 0);
+            return cells.map(() => CELLSTATE.dead);
         })
 
-        setGeneration(deadGeneration);
+        return deadGeneration;
     }
 
     const updateRow = (event: ChangeEvent<{ value: unknown }>): void => {
@@ -199,13 +206,31 @@ export const GameOfLife = (): ReactElement => {
 
     const play = (): void => {
         setCommand(COMMAND.resume);
+        setStatus(STATUS.on);
         nextGeneration();
+    }
+
+    const playGlider = (): void => {
+        if (command === COMMAND.play) {// if it's already playing then do nothing
+            return;
+        }
+        const deadGeneration: number[][] = noSurvivors();
+        const copyGeneration: number[][] = deadGeneration.map((x: number[]) => x);
+        copyGeneration[0][1] = CELLSTATE.alive;
+        copyGeneration[1][2] = CELLSTATE.alive;
+        copyGeneration[2][0] = CELLSTATE.alive;
+        copyGeneration[2][1] = CELLSTATE.alive;
+        copyGeneration[2][2] = CELLSTATE.alive;
+        
+        setGeneration(copyGeneration);
+        setCommand(COMMAND.play);
+        setStatus(STATUS.off);
     }
 
     const handleStatus = (status: number): void => {
         if (status === STATUS.on) {
             setStatus(STATUS.off); // to show it's paused in the UI
-            setCommand(COMMAND.autoplay);
+            setCommand(COMMAND.play);
         } else {
             setStatus(STATUS.on);
             setCommand(COMMAND.pause);
@@ -213,19 +238,20 @@ export const GameOfLife = (): ReactElement => {
     }
 
     useEffect(() => {
-        if (command === COMMAND.autoplay) {
-            autoGeneration = setTimeout(() => {
-                nextGeneration()
-            }, 1000);
-        }
+        autoGeneration = setTimeout(() => {
+            if (command === COMMAND.play) {
+                nextGeneration();
+            }
+        }, 500);
     }, [command, nextGeneration])
 
 
     useEffect(() => {
         if (command === COMMAND.pause) {
+            console.log('grid', generation);
             clearTimeout(autoGeneration);
         }
-    })
+    }, [command, generation])
 
     return(
         <div className={classes.center}>
@@ -234,14 +260,14 @@ export const GameOfLife = (): ReactElement => {
                     <Button onClick={clearGrid}> Clear </Button>
                     <Button onClick={play}> Next Generation </Button>
                     <Button onClick={() => handleStatus(status)}>
-                        { status === STATUS.on ? COMMAND.autoplay : COMMAND.pause}
+                        { status === STATUS.on ? COMMAND.play : COMMAND.pause}
                     </Button>
-                    <Button>
+                    <Button onClick={playGlider}>
                         Glider
                     </Button>
                 </ButtonGroup>
             </div>
-            <form className={classes.formContainer} onSubmit={generateGrid}>
+            <form className={disabled ? classes.formContainer : classes.hide} onSubmit={generateGrid}>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Row</InputLabel>
                     <Select

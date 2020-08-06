@@ -4,4 +4,5 @@ export interface IClasses {
     formControl: any;
     center: any;
     gridContainer: any;
+    hide: any;
 }

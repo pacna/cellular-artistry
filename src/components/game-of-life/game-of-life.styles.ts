@@ -18,6 +18,9 @@ export const GameOfLifeStyles = makeStyles((theme: Theme) =>
     center: {
         textAlign: 'center'
     },
+    hide: {
+      display: 'none'
+    },
     gridContainer: {
         marginTop: '8vh',
         display: 'flex',
