@@ -28,8 +28,7 @@ import { CELLSTATE } from '../cell/cell.component';
 export enum COMMAND {
     pause = 'pause',
     resume = 'resume',
-    play = 'play',
-    clear = 'clear'
+    play = 'play'
 }
 
 enum STATUS {
@@ -301,7 +300,7 @@ export const GameOfLife = (): ReactElement => {
                         onChange={updateColumn}
                         MenuProps={MenuProps}>
                         {
-                            columnSize.map((x: number, i: number) => {
+                            columnSize.map((x: number) => {
                                 return(
                                     <MenuItem key={x} value={x}> {x} </MenuItem>
                                 )

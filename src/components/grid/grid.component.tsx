@@ -1,4 +1,7 @@
+// React
 import React, { ReactElement } from 'react';
+
+// Other
 import { GridStyles} from './grid.styles';
 import { Cell } from '../cell/cell.component';
 import { IGrid, IClasses } from './grid.interfaces';

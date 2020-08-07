@@ -1,4 +1,11 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+// React
+import React, { 
+    useState, 
+    useEffect, 
+    ReactElement 
+} from 'react';
+
+// Other
 import { CellStyles } from './cell.styles';
 import { ICell, IClasses } from './cell.interfaces';
 import { COMMAND } from '../game-of-life/game-of-life.component';
@@ -7,6 +14,7 @@ export enum CELLSTATE {
     alive = 1, 
     dead = 0
 }
+
 let copyGeneration: number[][];
 
 export const Cell = (props: ICell): ReactElement => {
@@ -24,7 +32,7 @@ export const Cell = (props: ICell): ReactElement => {
 
     const classes: IClasses = CellStyles();
 
-    const updateCellBackgroundColor = (cellState: number): any => {
+    const updateCellBackgroundColor = (cellState: number): IClasses => {
         return cellState === CELLSTATE.alive ? classes.alive : classes.dead
     }
 
