@@ -4,8 +4,7 @@ import React, {
     useState, 
     ChangeEvent, 
     FormEvent, 
-    useEffect,
-    useRef
+    useEffect
 } from 'react';
 
 // Material UI
@@ -45,6 +44,9 @@ const MenuProps = {
         },
     }
 };
+
+const rowSize: number[] = GridSize.slice(0, Math.floor((GridSize.length / 2)) - 1);
+const columnSize: number[] = GridSize;
 
 // needs to be set outside the functional component to clear the setTimeout on time.
 let autoGeneration: any;
@@ -283,14 +285,14 @@ export const GameOfLife = (): ReactElement => {
                         MenuProps={MenuProps}
                     >
                         {
-                            GridSize.map((x: number) => {
+                            rowSize.map((x: number) => {
                                 return(
                                     <MenuItem key={x} value={x}> {x} </MenuItem>
                                 )
                             })
                         }
                     </Select>
-                    <FormHelperText>Pick {GridSize[0]} - {GridSize[GridSize.length - 1]} </FormHelperText>
+                    <FormHelperText>Pick {rowSize[0]} - {rowSize[rowSize.length - 1]} </FormHelperText>
                 </FormControl>
                 <FormControl color="secondary" required className={classes.formControl}>
                     <InputLabel>Column</InputLabel>
@@ -299,14 +301,14 @@ export const GameOfLife = (): ReactElement => {
                         onChange={updateColumn}
                         MenuProps={MenuProps}>
                         {
-                            GridSize.map((x: number, i: number) => {
+                            columnSize.map((x: number, i: number) => {
                                 return(
                                     <MenuItem key={x} value={x}> {x} </MenuItem>
                                 )
                             })
                         }
                     </Select>
-                    <FormHelperText>Pick {GridSize[0]} - {GridSize[GridSize.length - 1]}</FormHelperText>
+                    <FormHelperText>Pick {columnSize[0]} - {columnSize[GridSize.length - 1]}</FormHelperText>
                 </FormControl>
                 <Button type="submit" variant="contained" color="secondary">Generate</Button>
             </form>
