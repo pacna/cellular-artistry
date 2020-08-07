@@ -30,7 +30,11 @@ export const Cell = (props: ICell): ReactElement => {
 
     useEffect(() => {
         copyGeneration = props.generation.map((x: number[]) => x);
-        setCellState(copyGeneration[props.row][props.column]);
+        if (props.command === COMMAND.pause) {
+            props.setCommand(COMMAND.resume);
+        } else {
+            setCellState(copyGeneration[props.row][props.column]);
+        }
     }, [props, props.command, props.generation, props.row, props.column]);
 
     return(

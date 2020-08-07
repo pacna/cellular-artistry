@@ -46,6 +46,9 @@ const MenuProps = {
     }
 };
 
+// needs to be set outside the functional component to clear the setTimeout on time.
+let autoGeneration: any;
+
 export const GameOfLife = (): ReactElement => {
     const [command, setCommand] = useState('');
     const [status, setStatus] = useState(STATUS.on);
@@ -54,13 +57,12 @@ export const GameOfLife = (): ReactElement => {
     const [column, setColumn] = useState('');
     const [generation, setGeneration] = useState([] as number[][])
     
-    let autoGeneration: any = useRef(null);
     const classes: IClasses = GameOfLifeStyles();
 
     const clearGrid = (): void => {
-        setCommand(COMMAND.resume);
         const emptyGeneration: number[][] = noSurvivors();
         setGeneration(emptyGeneration);
+        setCommand(COMMAND.pause);
         setStatus(STATUS.on);
     }
 
@@ -238,17 +240,23 @@ export const GameOfLife = (): ReactElement => {
     }
 
     useEffect(() => {
-        autoGeneration = setTimeout(() => {
-            if (command === COMMAND.play) {
+        if (command === COMMAND.play) {
+            autoGeneration = setTimeout(() => {
                 nextGeneration();
-            }
-        }, 500);
+            }, 500);
+        }
     }, [command, nextGeneration])
 
 
     useEffect(() => {
         if (command === COMMAND.pause) {
             clearTimeout(autoGeneration);
+        }
+    }, [command, generation])
+
+    useEffect(() => {
+        if (command === COMMAND.resume) {
+            return;
         }
     }, [command, generation])
 
