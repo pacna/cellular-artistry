@@ -19,7 +19,7 @@ export const TopNav = (): ReactElement => {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        REACT Game of Life
+                        React Game of Life
                     </Typography>
                 </Toolbar>
             </AppBar>

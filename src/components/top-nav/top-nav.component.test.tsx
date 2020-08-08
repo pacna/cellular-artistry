@@ -3,11 +3,11 @@ import { TopNav } from './top-nav.component';
 import { shallow } from 'enzyme';
 
 describe('TopNav', () => {
-    it('should display REACT Game of Life', () => {
+    it('should display React Game of Life', () => {
         // ARRANGE
         const wrapper = shallow(<TopNav />);
         
         // ASSERT
-        expect(wrapper.text()).toBe('REACT Game of Life');
+        expect(wrapper.text()).toBe('React Game of Life');
     })
 });
