@@ -1,15 +1,7 @@
 import React from 'react';
 import { GameOfLife } from './game-of-life.component';
 import { createShallow } from '@material-ui/core/test-utils';
-import { 
-    FormControl, 
-    InputLabel, 
-    Select, 
-    MenuItem, 
-    FormHelperText,
-    ButtonGroup,
-    Button
-} from '@material-ui/core';
+import { ButtonGroup } from '@material-ui/core';
 
 describe('GameOfLife', () => {
     let shallow;
