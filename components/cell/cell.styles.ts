@@ -1,17 +1,17 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, DefaultTheme, makeStyles } from "@mui/styles";
 
-export const CellStyles = makeStyles((theme: Theme) =>
+export const CellStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     cell: {
-        border: '1px solid black',
-        height: '14px',
-        width: '14px'
+      border: "1px solid black",
+      height: "14px",
+      width: "14px",
     },
     dead: {
-      background: '#262626'
+      background: "#262626",
     },
     alive: {
-      background: 'white'
-    }
+      background: "white",
+    },
   })
 );

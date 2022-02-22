@@ -1,13 +1,13 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, DefaultTheme } from "@mui/styles";
 
-export const GridStyles = makeStyles((theme: Theme) =>
+export const GridStyles = makeStyles((theme: DefaultTheme) =>
   createStyles({
     grid: {
-        backgroundColor: 'white',
-        maxWidth: 'fit-content'
+      backgroundColor: "white",
+      maxWidth: "fit-content",
     },
     cellContainer: {
-      display: 'flex'
-    }
+      display: "flex",
+    },
   })
 );

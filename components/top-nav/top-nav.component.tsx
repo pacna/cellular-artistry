@@ -6,7 +6,7 @@ import {
     AppBar,
     Toolbar,
     Typography 
-} from '@material-ui/core';
+} from '@mui/material';
 
 // Other
 import { TopNavStyles } from './top-nav.styles';

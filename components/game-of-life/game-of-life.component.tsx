@@ -15,8 +15,9 @@ import {
     MenuItem, 
     FormHelperText,
     ButtonGroup,
-    Button
-} from '@material-ui/core';
+    Button,
+    SelectChangeEvent
+} from '@mui/material';
 
 // Other
 import { GameOfLifeStyles } from './game-of-life.styles';
@@ -75,12 +76,12 @@ export const GameOfLife = (): ReactElement => {
         return deadGeneration;
     }
 
-    const updateRow = (event: ChangeEvent<{ value: unknown }>): void => {
-        const newRowValue = event.target.value as string;
+    const updateRow = (event: SelectChangeEvent<string>): void => {
+        const newRowValue = event.target.value;
         setRow(newRowValue);
     }
 
-    const updateColumn = (event: ChangeEvent<{ value: unknown }>): void => {
+    const updateColumn = (event: SelectChangeEvent<string>): void => {
         const newColumnValue = event.target.value as string;
         setColumn(newColumnValue);
     }
