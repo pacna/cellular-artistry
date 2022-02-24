@@ -1,0 +1,10 @@
+@import "./colors.scss";
+
+.grid {
+  background: $plainWhite;
+  max-width: fit-content;
+
+  .cellContainer {
+    display: flex;
+  }
+}

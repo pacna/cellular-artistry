@@ -1,0 +1,32 @@
+@import "./colors.scss";
+
+.gameOfLife {
+  text-align: center;
+
+  .buttonGroup {
+    text-align: center;
+    margin-top: 4vh;
+  }
+
+  .formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4vh;
+  }
+
+  .formControl {
+    min-width: 140px;
+    margin-right: 4vh;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .gridContainer {
+    margin-top: 8vh;
+    display: flex;
+    justify-content: center;
+  }
+}

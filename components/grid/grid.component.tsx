@@ -2,12 +2,13 @@
 import React, { ReactElement } from 'react';
 
 // Other
-import { GridStyles} from './grid.styles';
 import { Cell } from '../cell/cell.component';
-import { IGrid, IClasses } from './grid.interfaces';
+import { IGrid } from './grid.interfaces';
+
+// styles
+import classes from '../../styles/grid.module.scss';
 
 export const Grid = (props: IGrid): ReactElement => {
-    const classes: IClasses = GridStyles();
 
     const createGrid = (generation: number[][]): ReactElement => {
         return (

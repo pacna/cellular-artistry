@@ -2,7 +2,6 @@
 import React, { 
     ReactElement, 
     useState, 
-    ChangeEvent, 
     FormEvent, 
     useEffect
 } from 'react';
@@ -20,11 +19,12 @@ import {
 } from '@mui/material';
 
 // Other
-import { GameOfLifeStyles } from './game-of-life.styles';
-import { IClasses } from './game-of-life.interfaces';
 import { Grid } from '../grid/grid.component';
 import { GridSize } from './grid-size';
 import { CELLSTATE } from '../cell/cell.component';
+
+// styles
+import classes from '../../styles/game-of-life.module.scss';
 
 export enum COMMAND {
     pause = 'pause',
@@ -58,8 +58,6 @@ export const GameOfLife = (): ReactElement => {
     const [row, setRow] = useState('');
     const [column, setColumn] = useState('');
     const [generation, setGeneration] = useState([] as number[][])
-    
-    const classes: IClasses = GameOfLifeStyles();
 
     const clearGrid = (): void => {
         const emptyGeneration: number[][] = noSurvivors();
@@ -263,8 +261,8 @@ export const GameOfLife = (): ReactElement => {
     }, [command, generation])
 
     return(
-        <div className={classes.center}>
-            <div className={classes.marginTop4vhSpacing}>
+        <div className={classes.gameOfLife}>
+            <div className={classes.buttonGroup}>
                 <ButtonGroup variant="contained" color="primary" disabled={disabled}>
                     <Button onClick={clearGrid}> Clear </Button>
                     <Button onClick={play}> Next Generation </Button>

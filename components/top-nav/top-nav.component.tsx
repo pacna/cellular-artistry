@@ -8,21 +8,17 @@ import {
     Typography 
 } from '@mui/material';
 
-// Other
-import { TopNavStyles } from './top-nav.styles';
-import { IClasses } from './top-nav.interfaces';
+// styles
+import classes from '../../styles/top-nav.module.scss';
 
 export const TopNav = (): ReactElement => {
-    const classes: IClasses = TopNavStyles();
     return(
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                        React Game of Life
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-        </div>
+        <AppBar position="static" className={classes.root}>
+            <Toolbar>
+                <Typography variant="h6" className={classes.title}>
+                    React Game of Life
+                </Typography>
+            </Toolbar>
+        </AppBar>
     )
 }

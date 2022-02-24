@@ -6,9 +6,11 @@ import React, {
 } from 'react';
 
 // Other
-import { CellStyles } from './cell.styles';
-import { ICell, IClasses } from './cell.interfaces';
+import { ICell} from './cell.interfaces';
 import { COMMAND } from '../game-of-life/game-of-life.component';
+
+// styles
+import classes from '../../styles/cell.module.scss';
 
 export enum CELLSTATE {
     alive = 1, 
@@ -30,9 +32,7 @@ export const Cell = (props: ICell): ReactElement => {
         }
     }
 
-    const classes: IClasses = CellStyles();
-
-    const updateCellBackgroundColor = (cellState: number): IClasses => {
+    const updateCellBackgroundColor = (cellState: number): string => {
         return cellState === CELLSTATE.alive ? classes.alive : classes.dead
     }
 
