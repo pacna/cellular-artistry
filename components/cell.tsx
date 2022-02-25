@@ -6,20 +6,15 @@ import React, {
 } from 'react';
 
 // Other
-import { ICell} from './cell.interfaces';
-import { COMMAND } from '../game-of-life/game-of-life.component';
+import { CellConfig} from './types/configs/cell-config';
 
 // styles
-import classes from '../../styles/cell.module.scss';
-
-export enum CELLSTATE {
-    alive = 1, 
-    dead = 0
-}
+import classes from '../styles/cell.module.scss';
+import { CELLSTATE, COMMAND } from './types/customs';
 
 let copyGeneration: number[][];
 
-export const Cell = (props: ICell): ReactElement => {
+export const Cell = (props: CellConfig): ReactElement => {
     const [cellState, setCellState] = useState(props.cellState);
     
     const changeCellState = (): void => {

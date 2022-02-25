@@ -1,4 +1,4 @@
-export interface ICell {
+export interface CellConfig {
   cellState: number;
   command: string;
   setCommand: Function;

@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 // styles
-import classes from '../../styles/top-nav.module.scss';
+import classes from '../styles/top-nav.module.scss';
 
 export const TopNav = (): ReactElement => {
     return(

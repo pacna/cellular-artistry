@@ -19,23 +19,12 @@ import {
 } from '@mui/material';
 
 // Other
-import { Grid } from '../grid/grid.component';
-import { GridSize } from './grid-size';
-import { CELLSTATE } from '../cell/cell.component';
+import { Grid } from './grid';
+import { GridSize } from './types/customs/grid-size';
 
 // styles
-import classes from '../../styles/game-of-life.module.scss';
-
-export enum COMMAND {
-    pause = 'pause',
-    resume = 'resume',
-    play = 'play'
-}
-
-enum STATUS {
-    on = 1,
-    off = 0
-}
+import classes from '../styles/game-of-life.module.scss';
+import { CELLSTATE, COMMAND, STATUS } from './types/customs';
 
 const MenuProps = {
     PaperProps: {
