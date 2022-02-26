@@ -1,17 +1,14 @@
-// React
-import React, { ReactElement } from 'react';
-
-// Material UI
+// Mui
 import { 
     AppBar,
     Toolbar,
     Typography 
 } from '@mui/material';
 
-// styles
+// Styles
 import classes from '../styles/top-nav.module.scss';
 
-export const TopNav = (): ReactElement => {
+export const TopNav = (): JSX.Element => {
     return(
         <AppBar position="static" className={classes.root}>
             <Toolbar>

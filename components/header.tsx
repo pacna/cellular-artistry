@@ -1,5 +1,4 @@
-
-// next
+// Next
 import Head from 'next/head'
 
 export const Header = (): JSX.Element => {

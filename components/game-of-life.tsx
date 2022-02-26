@@ -2,50 +2,29 @@
 import React, { 
     ReactElement, 
     useState, 
-    FormEvent, 
     useEffect
 } from 'react';
 
-// Material UI
-import { 
-    FormControl, 
-    InputLabel, 
-    Select, 
-    MenuItem, 
-    FormHelperText,
-    ButtonGroup,
-    Button,
-    SelectChangeEvent
-} from '@mui/material';
-
-// Other
+// Components
 import { Grid } from './grid';
-import { GridSize } from './types/customs/grid-size';
+import { GridFormManagement } from './grid-form-management';
+import { GameOfLifeActions } from './game-of-life-actions';
 
-// styles
-import classes from '../styles/game-of-life.module.scss';
+// Types
 import { CELLSTATE, COMMAND, STATUS } from './types/customs';
 
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: 370
-        },
-    }
-};
-
-const rowSize: number[] = GridSize.slice(0, Math.floor((GridSize.length / 2)) - 1);
-const columnSize: number[] = GridSize;
+// Styles
+import classes from '../styles/game-of-life.module.scss';
 
 // needs to be set outside the functional component to clear the setTimeout on time.
 let autoGeneration: any;
 
 export const GameOfLife = (): ReactElement => {
     const [command, setCommand] = useState('');
-    const [status, setStatus] = useState(STATUS.on);
-    const [disabled, setDisabled] = useState(true);
-    const [row, setRow] = useState('');
-    const [column, setColumn] = useState('');
+    const [status, setStatus] = useState<STATUS>(STATUS.on);
+    const [disabled, setDisabled] = useState<boolean>(true);
+    const [row, setRow] = useState<number>(0);
+    const [column, setColumn] = useState<number>(0);
     const [generation, setGeneration] = useState([] as number[][])
 
     const clearGrid = (): void => {
@@ -62,19 +41,8 @@ export const GameOfLife = (): ReactElement => {
 
         return deadGeneration;
     }
-
-    const updateRow = (event: SelectChangeEvent<string>): void => {
-        const newRowValue = event.target.value;
-        setRow(newRowValue);
-    }
-
-    const updateColumn = (event: SelectChangeEvent<string>): void => {
-        const newColumnValue = event.target.value as string;
-        setColumn(newColumnValue);
-    }
     
-    const generateGrid = (event: FormEvent<HTMLFormElement>): void => {
-        event.preventDefault();
+    const generateGrid = (): void => {
         createGrid();
         if(disabled) {// no need to set it to false every time.
             setDisabled(false);
@@ -84,9 +52,9 @@ export const GameOfLife = (): ReactElement => {
 
     const createGrid = (): void => {
         let firstGeneration: number[][] = [];
-        for(let i = 0; i < Number(row); i++) {
+        for(let i = 0; i < row; i++) {
             firstGeneration.push([]);
-            for(let j = 0; j < Number(column); j++) {
+            for(let j = 0; j < column; j++) {
                 firstGeneration[i].push(setRandomCellState());
             }
         }
@@ -228,6 +196,28 @@ export const GameOfLife = (): ReactElement => {
         }
     }
 
+    const displayActions = (): JSX.Element => {
+        if (disabled) {
+            return(
+                <GridFormManagement
+                    setRow={setRow}
+                    setColumn={setColumn}
+                    generateGrid={generateGrid} 
+                />
+            )
+        }
+
+        return(
+            <GameOfLifeActions
+                clearGrid={clearGrid}
+                play={play}
+                playGlider={playGlider}
+                handleStatus={handleStatus}
+                status={status}
+             />
+        )
+    }
+
     useEffect(() => {
         if (command === COMMAND.play) {
             autoGeneration = setTimeout(() => {
@@ -251,54 +241,7 @@ export const GameOfLife = (): ReactElement => {
 
     return(
         <div className={classes.gameOfLife}>
-            <div className={classes.buttonGroup}>
-                <ButtonGroup variant="contained" color="primary" disabled={disabled}>
-                    <Button onClick={clearGrid}> Clear </Button>
-                    <Button onClick={play}> Next Generation </Button>
-                    <Button onClick={() => handleStatus(status)}>
-                        { status === STATUS.on ? COMMAND.play : COMMAND.pause}
-                    </Button>
-                    <Button onClick={playGlider}>
-                        Glider
-                    </Button>
-                </ButtonGroup>
-            </div>
-            <form className={disabled ? classes.formContainer : classes.hide} onSubmit={generateGrid}>
-                <FormControl color="secondary" required className={classes.formControl}>
-                    <InputLabel>Row</InputLabel>
-                    <Select
-                        value={row} 
-                        onChange={updateRow}
-                        MenuProps={MenuProps}
-                    >
-                        {
-                            rowSize.map((x: number) => {
-                                return(
-                                    <MenuItem key={x} value={x}> {x} </MenuItem>
-                                )
-                            })
-                        }
-                    </Select>
-                    <FormHelperText>Pick {rowSize[0]} - {rowSize[rowSize.length - 1]} </FormHelperText>
-                </FormControl>
-                <FormControl color="secondary" required className={classes.formControl}>
-                    <InputLabel>Column</InputLabel>
-                    <Select
-                        value={column}
-                        onChange={updateColumn}
-                        MenuProps={MenuProps}>
-                        {
-                            columnSize.map((x: number) => {
-                                return(
-                                    <MenuItem key={x} value={x}> {x} </MenuItem>
-                                )
-                            })
-                        }
-                    </Select>
-                    <FormHelperText>Pick {columnSize[0]} - {columnSize[GridSize.length - 1]}</FormHelperText>
-                </FormControl>
-                <Button type="submit" variant="contained" color="secondary">Generate</Button>
-            </form>
+            { displayActions() }
             <div className={classes.gridContainer}>
                 <Grid 
                     generation={generation}

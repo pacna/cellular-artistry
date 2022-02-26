@@ -1,8 +1,7 @@
 // React
 import React, { 
     useState, 
-    useEffect, 
-    ReactElement 
+    useEffect 
 } from 'react';
 
 // Other
@@ -14,7 +13,7 @@ import { CELLSTATE, COMMAND } from './types/customs';
 
 let copyGeneration: number[][];
 
-export const Cell = (props: CellConfig): ReactElement => {
+export const Cell = (props: CellConfig): JSX.Element => {
     const [cellState, setCellState] = useState(props.cellState);
     
     const changeCellState = (): void => {

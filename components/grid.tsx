@@ -1,16 +1,13 @@
-// React
-import React, { ReactElement } from 'react';
-
 // Other
 import { Cell } from './cell';
 import { GridConfig } from './types/configs/grid-config';
 
-// styles
+// Styles
 import classes from '../styles/grid.module.scss';
 
-export const Grid = (props: GridConfig): ReactElement => {
+export const Grid = (props: GridConfig): JSX.Element => {
 
-    const createGrid = (generation: number[][]): ReactElement => {
+    const createGrid = (generation: number[][]): JSX.Element => {
         return (
             <div className={classes.grid}>
                 {
