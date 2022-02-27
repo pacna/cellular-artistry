@@ -6,6 +6,7 @@ import { GridConfig } from './types/configs/grid-config';
 import classes from '../styles/grid.module.scss';
 
 export const Grid = (props: GridConfig): JSX.Element => {
+    const { generation, setGeneration } = props;
 
     const createGrid = (generation: number[][]): JSX.Element => {
         return (
@@ -20,10 +21,8 @@ export const Grid = (props: GridConfig): JSX.Element => {
                                             <Cell 
                                                 cellState={cellState} 
                                                 key={j}
-                                                command={props.command}
-                                                setCommand={props.setCommand}
                                                 generation={generation}
-                                                setGeneration={props.setGeneration}
+                                                setGeneration={setGeneration}
                                                 row={i}
                                                 column={j}
                                             />
@@ -40,7 +39,7 @@ export const Grid = (props: GridConfig): JSX.Element => {
     return (
         <div>
             {   
-                createGrid(props.generation)
+                createGrid(generation)
             }
         </div>
     )

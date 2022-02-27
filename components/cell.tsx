@@ -1,20 +1,26 @@
 // React
-import React, { 
+import { 
     useState, 
     useEffect 
 } from 'react';
 
-// Other
+// Types
 import { CellConfig} from './types/configs/cell-config';
-
-// styles
-import classes from '../styles/cell.module.scss';
 import { CELLSTATE, COMMAND } from './types/customs';
+
+// Styles
+import classes from '../styles/cell.module.scss';
+
+// Redux
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { setCommand } from '../redux/reducers/command-slice';
 
 let copyGeneration: number[][];
 
 export const Cell = (props: CellConfig): JSX.Element => {
+    const command = useSelector((state: RootStateOrAny) => state.command.value);
     const [cellState, setCellState] = useState(props.cellState);
+    const dispatch = useDispatch();
     
     const changeCellState = (): void => {
         if(cellState === CELLSTATE.alive) { 
@@ -32,12 +38,12 @@ export const Cell = (props: CellConfig): JSX.Element => {
 
     useEffect(() => {
         copyGeneration = props.generation.map((x: number[]) => x);
-        if (props.command === COMMAND.pause) {
-            props.setCommand(COMMAND.resume);
+        if (command === COMMAND.pause) {
+            dispatch(setCommand(COMMAND.resume));
         } else {
             setCellState(copyGeneration[props.row][props.column]);
         }
-    }, [props, props.command, props.generation, props.row, props.column]);
+    }, [props, props.generation, props.row, props.column]);
 
     return(
         <div

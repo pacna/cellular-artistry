@@ -16,21 +16,26 @@ import { CELLSTATE, COMMAND, STATUS } from './types/customs';
 // Styles
 import classes from '../styles/game-of-life.module.scss';
 
+// Redux
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
+import { setCommand } from '../redux/reducers/command-slice';
+
 // needs to be set outside the functional component to clear the setTimeout on time.
-let autoGeneration: any;
+let loop: any;
 
 export const GameOfLife = (): ReactElement => {
-    const [command, setCommand] = useState('');
+    const command = useSelector((state: RootStateOrAny) => state.command.value);
     const [status, setStatus] = useState<STATUS>(STATUS.on);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [row, setRow] = useState<number>(0);
     const [column, setColumn] = useState<number>(0);
-    const [generation, setGeneration] = useState([] as number[][])
+    const [generation, setGeneration] = useState<number[][]>([] as number[][])
+    const dispatch = useDispatch();
 
     const clearGrid = (): void => {
         const emptyGeneration: number[][] = noSurvivors();
         setGeneration(emptyGeneration);
-        setCommand(COMMAND.pause);
+        dispatch(setCommand(COMMAND.pause));
         setStatus(STATUS.on);
     }
 
@@ -71,63 +76,28 @@ export const GameOfLife = (): ReactElement => {
             return;
         }
 
-        const nextGeneration: number[][] = generation.map((cells: number[], i: number) => {
-            return cells.map((cell: number, j: number) => {
+        const nextGeneration: number[][] = generation.map((cells: number[], rowIndex: number) => {
+            return cells.map((cell: number, columnIndex: number) => {
+
+                // neighbors: LEFT, RIGHT, TOP, DOWN, TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT
+                const neighborOffsets: number[][] = [
+                    [-1, 0],
+                    [1, 0],
+                    [0, -1],
+                    [0, 1],
+                    [-1, -1],
+                    [-1, 1],
+                    [1, -1],
+                    [1, 1],
+                ];
+    
                 let aliveCount: number = 0;
 
-                // left neighbor
-                if (isWithinRange(i, j-1)) {
-                    const leftNeighbor: number = generation[i][j-1];
-                    if (leftNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // right neighbor
-                if (isWithinRange(i, j+1)) {
-                    const rightNeighbor: number = generation[i][j+1];
-                    if(rightNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // top neighbor
-                if (isWithinRange(i-1, j)) {
-                    const topNeighbor: number = generation[i-1][j];
-                    if(topNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // down neighbor
-                if (isWithinRange(i+1, j)) {
-                    const downNeighbor: number = generation[i+1][j];
-                    if(downNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // top left neighbor
-                if(isWithinRange(i-1, j-1)) {
-                    const topLeftNeighbor: number = generation[i-1][j-1];
-                    if (topLeftNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // top right neighbor
-                if(isWithinRange(i-1, j+1)) {
-                    const topRightNeighbor: number = generation[i-1][j+1];
-                    if (topRightNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // bottom left neighbor
-                if (isWithinRange(i+1, j-1)) {
-                    const bottomLeftNeighbor: number = generation[i+1][j-1];
-                    if (bottomLeftNeighbor === CELLSTATE.alive) {
-                        aliveCount++;
-                    }
-                }
-                // bottom right neighbor
-                if (isWithinRange(i+1, j+1)) {
-                    const bottomRightNeighbor: number = generation[i+1][j+1];
-                    if( bottomRightNeighbor === CELLSTATE.alive) {
+                for(const neighborOffset of neighborOffsets) {
+                    let neighborXPos: number = rowIndex + neighborOffset[0];
+                    let neighborYPos: number = columnIndex + neighborOffset[1];
+
+                    if (isWithinRange(neighborXPos, neighborYPos) && generation[neighborXPos][neighborYPos] === CELLSTATE.alive) {
                         aliveCount++;
                     }
                 }
@@ -155,16 +125,12 @@ export const GameOfLife = (): ReactElement => {
         }
     }
 
-    const isWithinRange = (row: number, column: number): boolean => {
-        if((row >= 0 && row < generation.length) && (column >= 0 && column < generation[0].length)) {
-            return true;
-        } else {
-            return false;
-        }
+    const isWithinRange = (xPos: number, yPos: number): boolean => {
+        return (xPos >= 0 && xPos < row) && (yPos >= 0 && yPos < column);
     }
 
     const play = (): void => {
-        setCommand(COMMAND.resume);
+        dispatch(setCommand(COMMAND.resume));
         setStatus(STATUS.on);
         nextGeneration();
     }
@@ -182,17 +148,17 @@ export const GameOfLife = (): ReactElement => {
         copyGeneration[2][2] = CELLSTATE.alive;
         
         setGeneration(copyGeneration);
-        setCommand(COMMAND.play);
+        dispatch(setCommand(COMMAND.play));
         setStatus(STATUS.off);
     }
 
     const handleStatus = (status: number): void => {
         if (status === STATUS.on) {
             setStatus(STATUS.off); // to show it's paused in the UI
-            setCommand(COMMAND.play);
+            dispatch(setCommand(COMMAND.play));
         } else {
             setStatus(STATUS.on);
-            setCommand(COMMAND.pause);
+            dispatch(setCommand(COMMAND.pause));
         }
     }
 
@@ -219,25 +185,21 @@ export const GameOfLife = (): ReactElement => {
     }
 
     useEffect(() => {
-        if (command === COMMAND.play) {
-            autoGeneration = setTimeout(() => {
-                nextGeneration();
-            }, 500);
+        switch(command) {
+            case COMMAND.play:
+                loop = setTimeout(() => {
+                    nextGeneration();
+                }, 500);
+                break;
+            case COMMAND.pause:
+                clearTimeout(loop);
+                break;
+            case COMMAND.resume:
+                break;
+            default:
+                break;
         }
     }, [command, nextGeneration])
-
-
-    useEffect(() => {
-        if (command === COMMAND.pause) {
-            clearTimeout(autoGeneration);
-        }
-    }, [command, generation])
-
-    useEffect(() => {
-        if (command === COMMAND.resume) {
-            return;
-        }
-    }, [command, generation])
 
     return(
         <div className={classes.gameOfLife}>
@@ -246,8 +208,6 @@ export const GameOfLife = (): ReactElement => {
                 <Grid 
                     generation={generation}
                     setGeneration={setGeneration}
-                    command={command}
-                    setCommand={setCommand}
                     />
             </div>
         </div>
