@@ -107,17 +107,9 @@ export const GameOfLife = (): ReactElement => {
 
     const applyGameOfLifeRules = (aliveCount: number, cell: number): number => {
         if (cell === CELLSTATE.alive) {
-            if (aliveCount === 2 || aliveCount === 3) {
-                return CELLSTATE.alive;
-            } else {
-                return CELLSTATE.dead;
-            }
+            return (aliveCount === 2 || aliveCount === 3) ? CELLSTATE.alive : CELLSTATE.dead; 
         } else {
-            if (aliveCount === 3) {
-                return CELLSTATE.alive;
-            } else {
-                return CELLSTATE.dead;
-            }
+            return (aliveCount === 3) ? CELLSTATE.alive : CELLSTATE.dead;
         }
     }
 
