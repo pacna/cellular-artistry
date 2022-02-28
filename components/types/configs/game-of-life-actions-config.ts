@@ -1,3 +1,4 @@
+// Types
 import { STATUS } from "./../customs/status.enum";
 
 export interface GameOfLifeActionsConfig {

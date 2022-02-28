@@ -1,10 +1,12 @@
-// Other
+// Components
 import { Cell } from './cell';
+
+// Types
 import { GridConfig } from './types/configs/grid-config';
+import { CELLSTATE } from './types';
 
 // Styles
 import classes from '../styles/grid.module.scss';
-import { CELLSTATE } from './types';
 
 export const Grid = (props: GridConfig): JSX.Element => {
     const { generation } = props;

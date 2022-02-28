@@ -20,9 +20,6 @@ import classes from '../styles/game-of-life.module.scss';
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { setCommand } from '../redux/reducers/command-slice';
 
-// needs to be set outside the functional component to clear the setTimeout on time.
-let loop: any;
-
 export const GameOfLife = (): ReactElement => {
     const command = useSelector((state: RootStateOrAny) => state.command.value);
     const [status, setStatus] = useState<STATUS>(STATUS.on);
@@ -50,10 +47,7 @@ export const GameOfLife = (): ReactElement => {
     
     const generateGrid = (): void => {
         createGrid();
-        if(disabled) {// no need to set it to false every time.
-            setDisabled(false);
-        }
-
+        setDisabled(false);
     }
 
     const createGrid = (): void => {
@@ -156,7 +150,7 @@ export const GameOfLife = (): ReactElement => {
 
     const handleStatus = (status: number): void => {
         if (status === STATUS.on) {
-            setStatus(STATUS.off); // to show it's paused in the UI
+            setStatus(STATUS.off);
             dispatch(setCommand(COMMAND.play));
         } else {
             setStatus(STATUS.on);
@@ -194,7 +188,7 @@ export const GameOfLife = (): ReactElement => {
 
         return (
             <div className={classes.gridContainer}>
-                <h4> Generation { generationCounter } </h4>
+                <h3> Generation { generationCounter } </h3>
                 <Grid 
                     generation={generation}
                     />
@@ -203,19 +197,19 @@ export const GameOfLife = (): ReactElement => {
     }
 
     useEffect(() => {
-        switch(command) {
-            case COMMAND.play:
-                loop = setTimeout(() => {
+        let loop = setTimeout(() => {
+            switch(command) {
+                case COMMAND.play:
                     nextGeneration();
-                }, 500);
-                break;
-            case COMMAND.pause:
-                clearTimeout(loop);
-                break;
-            case COMMAND.resume:
-            default:
-                break;
-        }
+                    break;
+                case COMMAND.pause:
+                case COMMAND.resume:
+                default:
+                    break;
+            }
+        }, 500)
+
+        return () => clearTimeout(loop);
     }, [command, nextGeneration])
 
     return(

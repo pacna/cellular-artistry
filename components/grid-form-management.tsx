@@ -15,8 +15,8 @@ import { GridFormManagementConfig } from './types/configs/grid-form-management-c
 
 export const GridFormManagement = (props: GridFormManagementConfig): JSX.Element => {
     const { setRow, setColumn, generateGrid } = props;
-    const [ rowValidator, setRowValidator ] = useState(false);
-    const [ columnValidator, setColumnValidator ] = useState(false);
+    const [ rowValidator, setRowValidator ] = useState<boolean>(false);
+    const [ columnValidator, setColumnValidator ] = useState<boolean>(false);
 
     const handleRowInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         const rowInput: number = Number(event.target.value);

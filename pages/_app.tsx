@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 // Styles
 import '../styles/globals.scss'
 
-// Third party
+// Redux
 import { Provider } from 'react-redux'
 import store from '../redux/store'
 

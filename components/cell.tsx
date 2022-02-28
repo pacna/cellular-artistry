@@ -13,7 +13,7 @@ import classes from '../styles/cell.module.scss';
 
 export const Cell = (props: CellConfig): JSX.Element => {
     const { state, xPos, yPos, updateCellState } = props;
-    const [cellState, setCellState] = useState(state);
+    const [cellState, setCellState] = useState<CELLSTATE>(state);
 
     const changeCellState = (): void => {
         if(cellState === CELLSTATE.alive) { 
