@@ -21,7 +21,7 @@ export const commandSlice: Slice<
   "command"
 > = createSlice({
   name: "command",
-  initialState: { value: COMMAND.pause as COMMAND },
+  initialState: { value: COMMAND.resume as COMMAND },
   reducers: {
     setCommand: (state: { value: COMMAND }, action: { payload: any }): void => {
       state.value = action.payload;

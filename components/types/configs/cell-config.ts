@@ -1,7 +1,9 @@
+// Types
+import { CELLSTATE } from "../customs";
+
 export interface CellConfig {
-  cellState: number;
-  setGeneration: Function;
-  generation: number[][];
-  row: number;
-  column: number;
+  state: CELLSTATE;
+  xPos: number;
+  yPos: number;
+  updateCellState: (newState: CELLSTATE, xPos: number, yPos: number) => void;
 }

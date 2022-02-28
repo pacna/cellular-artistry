@@ -4,27 +4,31 @@ import { GridConfig } from './types/configs/grid-config';
 
 // Styles
 import classes from '../styles/grid.module.scss';
+import { CELLSTATE } from './types';
 
 export const Grid = (props: GridConfig): JSX.Element => {
-    const { generation, setGeneration } = props;
+    const { generation } = props;
 
-    const createGrid = (generation: number[][]): JSX.Element => {
+    const updateCellState = (newCellState: CELLSTATE, xPos: number, yPos: number): void => {
+        generation[xPos][yPos] = newCellState;
+    }
+
+    const createGrid = (generation: CELLSTATE[][]): JSX.Element => {
         return (
             <div className={classes.grid}>
                 {
-                    generation.map((cells: number[], i: number) => {
+                    generation.map((cells: CELLSTATE[], rowIndex: number) => {
                         return(
-                            <div className={classes.cellContainer} key={i}>
+                            <div className={classes.cellContainer} key={rowIndex}>
                                 {
-                                    cells.map((cellState: number, j: number) => {
+                                    cells.map((cellState: CELLSTATE, columnIndex: number) => {
                                         return (
                                             <Cell 
-                                                cellState={cellState} 
-                                                key={j}
-                                                generation={generation}
-                                                setGeneration={setGeneration}
-                                                row={i}
-                                                column={j}
+                                                state={cellState}
+                                                updateCellState={updateCellState} 
+                                                key={columnIndex}
+                                                xPos={rowIndex}
+                                                yPos={columnIndex}
                                             />
                                         )
                                     })
@@ -36,6 +40,7 @@ export const Grid = (props: GridConfig): JSX.Element => {
             </div>
         )
     }
+
     return (
         <div>
             {   

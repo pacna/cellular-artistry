@@ -11,7 +11,7 @@ import { GridFormManagement } from './grid-form-management';
 import { GameOfLifeActions } from './game-of-life-actions';
 
 // Types
-import { CELLSTATE, COMMAND, STATUS } from './types/customs';
+import { CellCoordinate, CELLSTATE, COMMAND, STATUS } from './types/customs';
 
 // Styles
 import classes from '../styles/game-of-life.module.scss';
@@ -29,18 +29,19 @@ export const GameOfLife = (): ReactElement => {
     const [disabled, setDisabled] = useState<boolean>(true);
     const [row, setRow] = useState<number>(0);
     const [column, setColumn] = useState<number>(0);
-    const [generation, setGeneration] = useState<number[][]>([] as number[][])
+    const [generation, setGeneration] = useState<CELLSTATE[][]>([] as CELLSTATE[][])
+    const [generationCounter, setGenerationCounter] = useState<number>(0);
     const dispatch = useDispatch();
 
     const clearGrid = (): void => {
-        const emptyGeneration: number[][] = noSurvivors();
+        const emptyGeneration: CELLSTATE[][] = noSurvivors();
         setGeneration(emptyGeneration);
-        dispatch(setCommand(COMMAND.pause));
+        dispatch(setCommand(COMMAND.resume));
         setStatus(STATUS.on);
     }
 
-    const noSurvivors = (): number[][] => {
-        const deadGeneration: number[][] = generation.map((cells: number[]) => {
+    const noSurvivors = (): CELLSTATE[][] => {
+        const deadGeneration: CELLSTATE[][] = generation.map((cells: CELLSTATE[]) => {
             return cells.map(() => CELLSTATE.dead);
         })
 
@@ -56,7 +57,7 @@ export const GameOfLife = (): ReactElement => {
     }
 
     const createGrid = (): void => {
-        let firstGeneration: number[][] = [];
+        let firstGeneration: CELLSTATE[][] = [];
         for(let i = 0; i < row; i++) {
             firstGeneration.push([]);
             for(let j = 0; j < column; j++) {
@@ -76,26 +77,26 @@ export const GameOfLife = (): ReactElement => {
             return;
         }
 
-        const nextGeneration: number[][] = generation.map((cells: number[], rowIndex: number) => {
-            return cells.map((cell: number, columnIndex: number) => {
+        // neighbors: LEFT, RIGHT, TOP, DOWN, TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT
+        const neighborOffsets: CellCoordinate[] = [
+            { xPos: -1, yPos: 0},
+            { xPos: 1, yPos: 0},
+            { xPos: 0, yPos: -1},
+            { xPos: 0, yPos: 1},
+            { xPos: -1, yPos: -1},
+            { xPos: -1, yPos: 1},
+            { xPos: 1, yPos: -1},
+            { xPos: 1, yPos: 1},
+        ];
 
-                // neighbors: LEFT, RIGHT, TOP, DOWN, TOP LEFT, TOP RIGHT, BOTTOM LEFT, BOTTOM RIGHT
-                const neighborOffsets: number[][] = [
-                    [-1, 0],
-                    [1, 0],
-                    [0, -1],
-                    [0, 1],
-                    [-1, -1],
-                    [-1, 1],
-                    [1, -1],
-                    [1, 1],
-                ];
+        const nextGeneration: CELLSTATE[][] = generation.map((cells: CELLSTATE[], rowIndex: number) => {
+            return cells.map((cell: CELLSTATE, columnIndex: number) => {
     
                 let aliveCount: number = 0;
 
                 for(const neighborOffset of neighborOffsets) {
-                    let neighborXPos: number = rowIndex + neighborOffset[0];
-                    let neighborYPos: number = columnIndex + neighborOffset[1];
+                    let neighborXPos: number = rowIndex + neighborOffset.xPos;
+                    let neighborYPos: number = columnIndex + neighborOffset.yPos;
 
                     if (isWithinRange(neighborXPos, neighborYPos) && generation[neighborXPos][neighborYPos] === CELLSTATE.alive) {
                         aliveCount++;
@@ -106,6 +107,7 @@ export const GameOfLife = (): ReactElement => {
             })
         })
 
+        setGenerationCounter(generationCounter + 1);
         setGeneration(nextGeneration);
     }
 
@@ -139,15 +141,15 @@ export const GameOfLife = (): ReactElement => {
         if (command === COMMAND.play) {// if it's already playing then do nothing
             return;
         }
-        const deadGeneration: number[][] = noSurvivors();
-        const copyGeneration: number[][] = deadGeneration.map((x: number[]) => x);
-        copyGeneration[0][1] = CELLSTATE.alive;
-        copyGeneration[1][2] = CELLSTATE.alive;
-        copyGeneration[2][0] = CELLSTATE.alive;
-        copyGeneration[2][1] = CELLSTATE.alive;
-        copyGeneration[2][2] = CELLSTATE.alive;
+
+        const deadGeneration: CELLSTATE[][] = noSurvivors();
+        deadGeneration[0][1] = CELLSTATE.alive;
+        deadGeneration[1][2] = CELLSTATE.alive;
+        deadGeneration[2][0] = CELLSTATE.alive;
+        deadGeneration[2][1] = CELLSTATE.alive;
+        deadGeneration[2][2] = CELLSTATE.alive;
         
-        setGeneration(copyGeneration);
+        setGeneration(deadGeneration);
         dispatch(setCommand(COMMAND.play));
         setStatus(STATUS.off);
     }
@@ -158,7 +160,7 @@ export const GameOfLife = (): ReactElement => {
             dispatch(setCommand(COMMAND.play));
         } else {
             setStatus(STATUS.on);
-            dispatch(setCommand(COMMAND.pause));
+            dispatch(setCommand(COMMAND.resume));
         }
     }
 
@@ -184,6 +186,22 @@ export const GameOfLife = (): ReactElement => {
         )
     }
 
+
+    const displayGrid = (): JSX.Element | void => {
+        if (disabled) {
+            return;
+        }
+
+        return (
+            <div className={classes.gridContainer}>
+                <h4> Generation { generationCounter } </h4>
+                <Grid 
+                    generation={generation}
+                    />
+            </div>
+        )
+    }
+
     useEffect(() => {
         switch(command) {
             case COMMAND.play:
@@ -195,7 +213,6 @@ export const GameOfLife = (): ReactElement => {
                 clearTimeout(loop);
                 break;
             case COMMAND.resume:
-                break;
             default:
                 break;
         }
@@ -204,12 +221,7 @@ export const GameOfLife = (): ReactElement => {
     return(
         <div className={classes.gameOfLife}>
             { displayActions() }
-            <div className={classes.gridContainer}>
-                <Grid 
-                    generation={generation}
-                    setGeneration={setGeneration}
-                    />
-            </div>
+            { displayGrid() }
         </div>
     )
 }
