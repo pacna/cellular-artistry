@@ -1,35 +1,49 @@
 # React Game of Life
- 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An implementation of Conway's Game of Life in React
 
-## Running the app with docker
+## Prerequisites
 
-### Prerequisites
-* [docker](https://docs.docker.com/get-docker/)
-* [docker-compose](https://docs.docker.com/compose/install/)
+1. [nodejs](https://nodejs.org/en/)
+2. [docker](https://docs.docker.com/install/) (optional)
+3. [docker-compose](https://docs.docker.com/compose/install/) (optional)
 
+## Install dependencies
 
-### Run
-
-```
-docker-compose up --build
+```bash
+$ npm ci
 ```
 
-## Running the app locally
+## Available Scripts for development
 
-### Prerequisites
-* [node](https://nodejs.org/en/)
+Runs the app in the development mode. Open http://localhost:3000 to view it in the browser.
 
-### Run
-
-```
-npm install
-npm start
+```bash
+$ npm run dev
 ```
 
-## Run tests
-```
-npm run test
+Clear out any stuck node processes.
+
+```bash
+$ npm run clean
 ```
 
+## Available Scripts for production
+
+Generates an optimized version of the application for production.
+
+```bash
+$ npm run build
+```
+
+To run in production mode
+
+```bash
+$ npm run start
+```
+
+## Docker command for production (Optional)
+
+```bash
+$ docker-compose up --build
+```
