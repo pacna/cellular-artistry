@@ -1,9 +1,11 @@
 // Types
-import { CELLSTATE } from "../customs";
+import { CELLSTATE, CellCoordinate } from "../customs";
 
 export interface CellConfig {
   state: CELLSTATE;
-  xPos: number;
-  yPos: number;
-  updateCellState: (newState: CELLSTATE, xPos: number, yPos: number) => void;
+  coordinate: CellCoordinate;
+  updateCellState: (
+    newCellState: CELLSTATE,
+    cellCoordinate: CellCoordinate
+  ) => void;
 }

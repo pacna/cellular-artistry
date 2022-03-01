@@ -52,18 +52,18 @@ export const GameOfLife = (): ReactElement => {
 
     const createGrid = (): void => {
         let firstGeneration: CELLSTATE[][] = [];
-        for(let i = 0; i < row; i++) {
+        for (let i = 0; i < row; i++) {
             firstGeneration.push([]);
-            for(let j = 0; j < column; j++) {
-                firstGeneration[i].push(setRandomCellState());
+            for (let j = 0; j < column; j++) {
+                firstGeneration[i].push(generateRandomCellState());
             }
         }
 
         setGeneration(firstGeneration);
     }
 
-    const setRandomCellState = (): number => {
-        return Math.round(Math.random()) // return either 0 or 1
+    const generateRandomCellState = (): CELLSTATE => {
+        return Math.round(Math.random()) as CELLSTATE
     }
 
     const nextGeneration = (): void => {
@@ -88,7 +88,7 @@ export const GameOfLife = (): ReactElement => {
     
                 let aliveCount: number = 0;
 
-                for(const neighborOffset of neighborOffsets) {
+                for (const neighborOffset of neighborOffsets) {
                     let neighborXPos: number = rowIndex + neighborOffset.xPos;
                     let neighborYPos: number = columnIndex + neighborOffset.yPos;
 
@@ -124,18 +124,31 @@ export const GameOfLife = (): ReactElement => {
     }
 
     const playGlider = (): void => {
+        const singleGliderGeneration: CELLSTATE[][] = noSurvivors();
+
+        // show glider on the left side if it's even generation
+        // show glider on the right side if it's old generation
+        if (generationCounter % 2 === 0) {
+            singleGliderGeneration[0][1] = CELLSTATE.alive;
+            singleGliderGeneration[1][2] = CELLSTATE.alive;
+            singleGliderGeneration[2][0] = CELLSTATE.alive;
+            singleGliderGeneration[2][1] = CELLSTATE.alive;
+            singleGliderGeneration[2][2] = CELLSTATE.alive;
+        } else  {
+            const rightEndSide: number = column - 1;
+            singleGliderGeneration[0][rightEndSide - 1] = CELLSTATE.alive;
+            singleGliderGeneration[1][rightEndSide - 2] = CELLSTATE.alive;
+            singleGliderGeneration[2][rightEndSide] = CELLSTATE.alive;
+            singleGliderGeneration[2][rightEndSide - 1] = CELLSTATE.alive;
+            singleGliderGeneration[2][rightEndSide - 2] = CELLSTATE.alive;   
+        }
+        
+        setGeneration(singleGliderGeneration);
+
         if (command === COMMAND.play) {// if it's already playing then do nothing
             return;
         }
 
-        const deadGeneration: CELLSTATE[][] = noSurvivors();
-        deadGeneration[0][1] = CELLSTATE.alive;
-        deadGeneration[1][2] = CELLSTATE.alive;
-        deadGeneration[2][0] = CELLSTATE.alive;
-        deadGeneration[2][1] = CELLSTATE.alive;
-        deadGeneration[2][2] = CELLSTATE.alive;
-        
-        setGeneration(deadGeneration);
         dispatch(setCommand(COMMAND.play));
         setStatus(STATUS.off);
     }

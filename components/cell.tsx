@@ -12,16 +12,16 @@ import { CELLSTATE } from './types/customs';
 import classes from '../styles/cell.module.scss';
 
 export const Cell = (props: CellConfig): JSX.Element => {
-    const { state, xPos, yPos, updateCellState } = props;
+    const { state, coordinate, updateCellState } = props;
     const [cellState, setCellState] = useState<CELLSTATE>(state);
 
     const changeCellState = (): void => {
-        if(cellState === CELLSTATE.alive) { 
+        if (cellState === CELLSTATE.alive) { 
             setCellState(CELLSTATE.dead);
-            updateCellState(CELLSTATE.dead, xPos, yPos);
+            updateCellState(CELLSTATE.dead, coordinate);
         } else {
             setCellState(CELLSTATE.alive);
-            updateCellState(CELLSTATE.alive, xPos, yPos);
+            updateCellState(CELLSTATE.alive, coordinate);
         }
     }
 
@@ -31,8 +31,8 @@ export const Cell = (props: CellConfig): JSX.Element => {
 
 
     useEffect(() => {
-        setCellState(props.state);
-    }, [props, props.state])
+        setCellState(state);
+    }, [props])
 
     return(
         <div
