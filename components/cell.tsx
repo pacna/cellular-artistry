@@ -32,7 +32,7 @@ export const Cell = (props: CellConfig): JSX.Element => {
 
     useEffect(() => {
         setCellState(state);
-    }, [props])
+    }, [props, state])
 
     return(
         <div
