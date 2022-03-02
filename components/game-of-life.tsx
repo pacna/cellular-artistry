@@ -127,7 +127,7 @@ export const GameOfLife = (): ReactElement => {
         const singleGliderGeneration: CELLSTATE[][] = noSurvivors();
 
         // show glider on the left side if it's even generation
-        // show glider on the right side if it's old generation
+        // show glider on the right side if it's odd generation
         if (generationCounter % 2 === 0) {
             singleGliderGeneration[0][1] = CELLSTATE.alive;
             singleGliderGeneration[1][2] = CELLSTATE.alive;
