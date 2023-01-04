@@ -4,11 +4,13 @@ An implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conwa
 
 ![react-game-of-life](./docs/react-game-of-life.png)
 
+Try it out [here](https://react-game-of-life-xi.vercel.app/)
+
 ## Prerequisites
 
-1. [nodejs](https://nodejs.org/en/)
-2. [docker](https://docs.docker.com/install/) (optional)
-3. [docker-compose](https://docs.docker.com/compose/install/) (optional)
+1. [Node.js](https://nodejs.org/en/)
+2. [Docker](https://docs.docker.com/install/) (optional)
+3. [Docker-compose](https://docs.docker.com/compose/install/) (optional)
 
 ## Install dependencies
 
