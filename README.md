@@ -1,53 +1,27 @@
-# React Game of Life
+# React + TypeScript + Vite
 
-An implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in React
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-![react-game-of-life](./docs/react-game-of-life.png)
+Currently, two official plugins are available:
 
-Try it out [here](https://react-game-of-life-xi.vercel.app/)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Prerequisites
+## Expanding the ESLint configuration
 
-1. [Node.js](https://nodejs.org/en/)
-2. [Docker](https://docs.docker.com/install/) (optional)
-3. [Docker-compose](https://docs.docker.com/compose/install/) (optional)
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-## Install dependencies
+- Configure the top-level `parserOptions` property like this:
 
-```bash
-$ npm ci
+```js
+   parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+   },
 ```
 
-## Available Scripts for development
-
-Runs the app in the development mode. Open http://localhost:3000 to view it in the browser.
-
-```bash
-$ npm run dev
-```
-
-Clear out any stuck node processes.
-
-```bash
-$ npm run clean
-```
-
-## Available Scripts for production
-
-Generates an optimized version of the application for production.
-
-```bash
-$ npm run build
-```
-
-To run in production mode
-
-```bash
-$ npm run start
-```
-
-## Docker command for production (Optional)
-
-```bash
-$ docker-compose up --build
-```
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
