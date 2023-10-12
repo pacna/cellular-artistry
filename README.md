@@ -1,27 +1,24 @@
-# React + TypeScript + Vite
+# Cellular Artistry
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 
-Currently, two official plugins are available:
+![cellular-artistry](./docs/cellular-artistry.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+You can try it out right now by clicking [here](https://pacna.github.io/cellular-artistry/).
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Before you begin using Cellular Artistry, make sure you have the following dependencies installed on your system:
 
-- Configure the top-level `parserOptions` property like this:
+1. [Node.js](https://nodejs.org/en)
+2. [Make](https://www.gnu.org/software/make/)
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+## Running locally
+
+To run Cellular Artistry on your local machine, execute the following command:
+
+```bash
+$ make local
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+After running the command, open your web browser and navigate to http://localhost:3000 to explore Cellular Artistry locally.
