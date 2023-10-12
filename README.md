@@ -1,53 +1,24 @@
-# React Game of Life
+# Cellular Artistry
 
-An implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) in React
+A web-based implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 
-![react-game-of-life](./docs/react-game-of-life.png)
+![cellular-artistry](./docs/cellular-artistry.png)
 
-Try it out [here](https://react-game-of-life-xi.vercel.app/)
+You can try it out right now by clicking [here](https://pacna.github.io/cellular-artistry/).
 
 ## Prerequisites
 
-1. [Node.js](https://nodejs.org/en/)
-2. [Docker](https://docs.docker.com/install/) (optional)
-3. [Docker-compose](https://docs.docker.com/compose/install/) (optional)
+Before you begin using Cellular Artistry, make sure you have the following dependencies installed on your system:
 
-## Install dependencies
+1. [Node.js](https://nodejs.org/en)
+2. [Make](https://www.gnu.org/software/make/)
 
-```bash
-$ npm ci
-```
+## Running locally
 
-## Available Scripts for development
-
-Runs the app in the development mode. Open http://localhost:3000 to view it in the browser.
+To run Cellular Artistry on your local machine, execute the following command:
 
 ```bash
-$ npm run dev
+$ make local
 ```
 
-Clear out any stuck node processes.
-
-```bash
-$ npm run clean
-```
-
-## Available Scripts for production
-
-Generates an optimized version of the application for production.
-
-```bash
-$ npm run build
-```
-
-To run in production mode
-
-```bash
-$ npm run start
-```
-
-## Docker command for production (Optional)
-
-```bash
-$ docker-compose up --build
-```
+After running the command, open your web browser and navigate to http://localhost:3000 to explore Cellular Artistry locally.
