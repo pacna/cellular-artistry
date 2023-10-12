@@ -3,35 +3,30 @@
 ## ----------------------------------------------------------------------
 ##
 ## Usage:
-##   - To run the application locally, use: 'make local'
-##   - To build the application, use: 'make build'
-##   - To deploy to GH Page, use: 'make deploy'
-##   - To run tests, use: 'make test'
-##   - To display this help message, use: 'make help'
+##   - make local        : Run the app locally
+##   - make build        : Build the application
+##   - make deploy       : Build and deploy to GitHub Pages
+##   - make test         : Run tests
+##   - make help         : Show available commands and descriptions
 ##
 
 .PHONY:local
-local: ##  Run the application locally
-##
+local:
 	npm run dev
 
 .PHONY:build
-build: ##  Build the application
-##
+build:
 	npm run build
 
 .PHONY:deploy
-deploy: ## Build and deploy to GH Page
-##
+deploy:
 	make build
 	bash deploy.sh
 
 .PHONY:test
-test: ##   Run tests
-##
+test:
 	npm test
 
 .PHONY:help
-help: ##   Show the help message with target descriptions
-##
+help:
 	@sed -ne '/@sed/!s/##//p' $(MAKEFILE_LIST)
