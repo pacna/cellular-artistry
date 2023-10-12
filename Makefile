@@ -6,6 +6,7 @@
 ##   - To run the application locally, use: 'make local'
 ##   - To build the application, use: 'make build'
 ##   - To deploy to GH Page, use: 'make deploy'
+##   - To run tests, use: 'make test'
 ##   - To display this help message, use: 'make help'
 ##
 
@@ -24,6 +25,11 @@ deploy: ## Build and deploy to GH Page
 ##
 	make build
 	bash deploy.sh
+
+.PHONY:test
+test: ##   Run tests
+##
+	npm test
 
 .PHONY:help
 help: ##   Show the help message with target descriptions

@@ -22,3 +22,11 @@ $ make local
 ```
 
 After running the command, open your web browser and navigate to http://localhost:3000 to explore Cellular Artistry locally.
+
+## Running tests
+
+To execute the tests, use the following command:
+
+```bash
+$ make test
+```
