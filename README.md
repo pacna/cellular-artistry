@@ -1,5 +1,7 @@
 # Cellular Artistry
 
+<img alt="Test passing" src="https://github.com/pacna/cellular-artistry/workflows/Test%20CI/badge.svg" />
+
 A web-based implementation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 
 ![cellular-artistry](./docs/cellular-artistry.png)

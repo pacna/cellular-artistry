@@ -1,7 +1,11 @@
 import { SetStateAction } from "react";
-import { Command } from "./command.enum";
 
-export interface CommandContextConfig {
+export enum Command {
+    Play = "Play",
+    Pause = "Pause",
+}
+
+export type CommandContextConfig = {
     command: Command;
     setCommand: (value: SetStateAction<Command>) => void;
-}
+};

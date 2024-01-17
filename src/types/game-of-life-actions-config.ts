@@ -1,5 +1,5 @@
-export interface GameOfLifeActionsConfig {
+export type GameOfLifeActionsConfig = {
     clearGrid: () => void;
     play: () => void;
     playGlider: () => void;
-}
+};
